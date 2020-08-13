@@ -92,21 +92,27 @@ yargs.command({
       demandOption: true,
     },
   },
-  handler: function (args) {
+  handler: function ({ id }) {
     const todos = loadData();
 
-    const results = todos.map((todo) =>
-      todo.id === args.id
-        ? {
-            ...todo,
-            completed: `${
-              todo.completed === "completed" ? "uncompleted" : "completed"
-            }`,
-          }
-        : todo
-    );
-    saveData(results);
-    console.log("changed");
+    const found = todos.findIndex((e) => e.id === id);
+    if (found !== -1) {
+      console.log("changed from", todos[found]);
+      todos[found].completed =
+        todos[found].completed === "completed" ? "uncompleted" : "completed";
+    }
+    saveData(todos);
+    console.log("changed to", todos[found]);
+    // const results = todos.map((todo) =>
+    //   todo.id === args.id
+    //     ? {
+    //         ...todo,
+    //         completed: `${
+    //           todo.completed === "completed" ? "uncompleted" : "completed"
+    //         }`,
+    //       }
+    //     : todo
+    // );
   },
 });
 
